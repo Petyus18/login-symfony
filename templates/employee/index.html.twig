@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employee list{% endblock %}
+
+{% block body %}
+            <h1>Employee list</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Birth Date</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Position</th>
+                    <th>Salary</th>
+                    <th>Department Name</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Birth Date</th>
+                    <th><input type="text" placeholder="First Name"/></th>
+                    <th><input type="text" placeholder="Last Name"/></th>
+                    <th>Gender</th>
+                    <th><input type="text" placeholder="Hire Date"/></th>
+                    <th><input type="text" placeholder="Position"/></th>
+                    <th>Salary</th>
+                    <th><input type="text" placeholder="Department Name"/></th>
+                    <th>Action</th>
+                </tr>
+                </tfoot>
+            </table>
+    <a href="{{ path('employee_new') }}" class="btn btn-primary">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function () {
+            var table = $('.table').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "searching": true,
+                "order": [[2, "asc"]],
+                "ajax": {
+                    'url': '{{ path('employee_list') }}',
+                    'type': 'POST'
+                },
+                "columns": [
+                    {"data": "emp_no", "orderable": false, "searchable": false},
+                    {"data": "birth_date", "orderable": false, "searchable": false},
+                    {"data": "first_name"},
+                    {"data": "last_name"},
+                    {"data": "gender", "orderable": false, "searchable": false},
+                    {"data": "hire_date"},
+                    {"data": "title"},
+                    {"data": "salary", "orderable": false, "searchable": false},
+                    {"data": "dept_name"},
+                    {"data": null, "defaultContent": "<button>Edit</button> <button>Delete</button>"}
+                ],
+                "columnDefs": [
+                    {
+                        "targets": 1, "width": "16%",render:function(data){
+                            return moment(data).format('YYYY-MM-DD');
+                        }
+                    },
+                    {
+                        "targets": 5, "width": "16%",render:function(data){
+                            return moment(data).format('YYYY-MM-DD');
+                        }
+                    },
+                    {
+                        "targets": 9, "data": "name", "render": function (data, type, full, meta) {
+                            return '<a href="' + data.emp_no + '/edit">EDIT</a> &nbsp&nbsp <a href="' + data.emp_no + '">VIEW</a>'
+                        }
+                    }],
+                initComplete: function () {
+                    // Apply the search
+                    this.api().columns().every(function () {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup', function (e) {
+                            if (e.key === 'Enter' || e.keyCode === 13) {
+                                if (that.search() !== this.value) {
+                                    that
+                                        .search(this.value)
+                                        .draw();
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,44 @@
+version: "3.5"
+services:
+  login_employees_php_fpm:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: login_employees_php_fpm
+    working_dir: /srv/login-symfony
+    networks:
+      - login_employees
+    volumes:
+      - ./:/srv/login-symfony
+
+  login_employees_nginx:
+    image: nginx:1.15
+    container_name: login_employees_nginx
+    working_dir: /srv/login-symfony
+    networks:
+      - login_employees
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/srv/login-symfony
+      - ./oam/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+
+  login_employees_mysql:
+    image: mysql:5.7
+    container_name: login_employees_mysql
+    restart: always
+    networks:
+      - login_employees
+    environment:
+      - MYSQL_DATABASE=employees
+      - MYSQL_ROOT_PASSWORD=login_employees
+      - MYSQL_USER=login_employees
+      - MYSQL_PASSWORD=login_employees
+    ports:
+      - 3306:3306
+    volumes:
+      #- /srv/projects/test_db:/mysql_data
+
+networks:
+  login_employees:
+    driver: bridge

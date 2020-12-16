@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employee{% endblock %}
+
+{% block body %}
+    <h1>Employee View</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Emp_no</th>
+                <td>{{ employee.empNo }}</td>
+            </tr>
+            <tr>
+                <th>Birth_date</th>
+                <td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>First_name</th>
+                <td>{{ employee.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Last_name</th>
+                <td>{{ employee.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>{{ employee.gender }}</td>
+            </tr>
+            <tr>
+                <th>Hire_date</th>
+                <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('employee_index') }}" class="btn btn-secondary">back to list</a>
+
+    <a href="{{ path('employee_edit', {'emp_no': employee.empNo }) }}"  class="btn btn-primary">edit</a>
+
+    {{ include('employee/_delete_form.html.twig') }}
+{% endblock %}
