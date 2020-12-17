@@ -73,20 +73,6 @@ class EmployeeEntityRepository extends EntityRepository {
 
         $this->addFieldSearch($queryBuilder, $listRequestData);
 
-        /* $queryBuilder->addOrderBy(
-             $this->_em->createQueryBuilder()
-                 ->select('ti.title')
-                 ->from('TitleEntity' ,'ti')
-                 ->where($expr->andX(
-                     $expr->eq('ti.employee', 'e.emp_no'),
-                     $expr->gte('ti.to_date', ':to_date')
-
-                 ))
-                 ->setParameter('to_date', new \DateTime())
-                 ->getDQL(),
-             'asc'
-         );*/
-
         $queryBuilder->setParameter(self::PARAMETER_TO_DATE, new \DateTime());
 
         return $queryBuilder->getQuery()->getArrayResult();
