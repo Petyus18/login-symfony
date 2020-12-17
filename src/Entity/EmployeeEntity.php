@@ -220,6 +220,4 @@ class EmployeeEntity {
     public function setDepartmentManagers(array $departmentManagers): void {
         $this->departmentManagers = $departmentManagers;
     }
-
-
 }

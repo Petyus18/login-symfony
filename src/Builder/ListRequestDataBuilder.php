@@ -24,12 +24,12 @@ class ListRequestDataBuilder {
      * @return ListRequestData
      */
     public function build(Request $request): ListRequestData {
-        $columns = $request->get(self::COLUMNS);
-        $requestOrder = $request->get(self::ORDER);
+        $columns = $request->get(self::COLUMNS, []);
+        $requestOrder = $request->get(self::ORDER, []);
 
         return new ListRequestData(
-            $request->get(self::START),
-            $request->get(self::LENGTH),
+            $request->get(self::START, 0),
+            $request->get(self::LENGTH, 20),
             $this->buildRequestOrderData($requestOrder, $columns),
             $this->buildFieldSearchData($columns)
         );
